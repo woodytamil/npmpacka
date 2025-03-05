@@ -1,5 +1,5 @@
 ---
-"@woody/npmpackage": patch
+"@woodydev/npmpackage": patch
 ---
 
 initial commit
