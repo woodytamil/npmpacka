@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - "main"
-  
+
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
@@ -25,7 +25,10 @@ jobs:
       - run: pnpm install --no-frozen-lockfile
 
       - name: Create Release pull request or Publish
-        run: npm publish --access public --no-git-checks
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm run release
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Changed from GIT_TOKEN to GITHUB_TOKEN
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
