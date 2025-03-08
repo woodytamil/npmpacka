@@ -1,20 +1,7 @@
 import  { z } from 'zod';
+import { createMessageProtocol } from "./createMessageProtocol"
 
-const createMessageBus =<T extends Record<string, z.ZodRawShape>, TExample=Pretifier<Example<T>>> (opts: {
-    events: T
-}) =>{}
-
-type Pretifier<T> = {
-    [K in keyof T]: T[K];
-} & {}
-
-type Example<T extends Record<string, z.ZodRawShape>> = {
-    [K in keyof T]: {
-        type: K;
-    } & z.infer<z.ZodObject<T[K]>>
-}[keyof T]
-
-const chromeExtension = createMessageBus({
+const messageBus = createMessageProtocol({
     events:{
         LOG_IN: {
             username: z.string(),
@@ -23,3 +10,9 @@ const chromeExtension = createMessageBus({
         LOG_OUT: {}
     }
 })
+
+const send = messageBus.createSender(window.postMessage)
+
+send({type:"LOG_IN", username: "p", password: "bar"})
+
+const handler = messageBus.createSender((e)=>{})
